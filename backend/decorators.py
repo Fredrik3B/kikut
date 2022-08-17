@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import request
+from flask import request, current_app
 import jwt
 
 def token_required(f):
@@ -12,7 +12,7 @@ def token_required(f):
             return {"error": "Mangler token"}, 401
 
         try:
-            data = jwt.decode(token, "test", algorithms="HS256")
+            data = jwt.decode(token, current_app.config["SECRET_KEY"], algorithms="HS256")
         except jwt.ExpiredSignatureError:
             return {"error": "Token er for gammel"}, 401
         except jwt.InvalidTokenError:

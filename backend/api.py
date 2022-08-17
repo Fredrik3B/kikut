@@ -1,8 +1,8 @@
 from flask.views import MethodView
-from flask import request
+from flask import request, current_app
 import jwt
 import datetime
-from auth import validate_login
+from .auth import validate_login
 
 
 class LoginAPI(MethodView):
@@ -21,6 +21,6 @@ class LoginAPI(MethodView):
             return {"error": login_status}, 401
 
         # lager en json web token som er gyldig i 6 timer, denne brukes i x-access-token headeren for å få tilgang til nettsiden
-        token = jwt.encode({"user": username, "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=6)}, "test")
+        token = jwt.encode({"user": username, "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=6)}, current_app.config["SECRET_KEY"])
 
         return {"token": token}
