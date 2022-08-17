@@ -3,6 +3,7 @@ from flask import request
 import jwt
 
 def token_required(f):
+    # decorator funksjon som sjekker om token er gyldig for å gi tilgang til nettsiden
     @wraps(f)
     def decorated(*args, **kwargs):
         token = request.headers.get("x-access-token")
